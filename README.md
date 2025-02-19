@@ -1,30 +1,30 @@
-- [![Starts](https://img.shields.io/github/stars/miladimos/package-skeleton?style=flat&logo=github)](https://github.com/miladimos/package-skeleton/forks)
-- [![Forks](https://img.shields.io/github/forks/miladimos/package-skeleton?style=flat&logo=github)](https://github.com/miladimos/package-skeleton/stargazers)
-  [![Total Downloads](https://img.shields.io/packagist/dt/miladimos/package-skeleton.svg?style=flat-square)](https://packagist.org/packages/miladimos/package-skeleton)
+- [![Starts](https://img.shields.io/github/stars/laravelir/bookmarkable?style=flat&logo=github)](https://github.com/laravelir/bookmarkable/forks)
+- [![Forks](https://img.shields.io/github/forks/laravelir/bookmarkable?style=flat&logo=github)](https://github.com/laravelir/bookmarkable/stargazers)
+  [![Total Downloads](https://img.shields.io/packagist/dt/laravelir/bookmarkable.svg?style=flat-square)](https://packagist.org/packages/laravelir/bookmarkable)
 
 
-# vendor/package
+# laravelir/bookmarkable
 
-A package for fun
+A bookmarkable for fun
 
 ### Installation
 
 1. Run the command below to add this package:
 
 ```
-composer require vendor/package
+composer require laravelir/bookmarkable
 ```
 
 2. Open your config/app.php and add the following to the providers array:
 
 ```php
-Vendor\Package\Providers\CacheableServiceProvider::class,
+Laravelir\Bookmarkable\Providers\BookmarkableServiceProvider::class,
 ```
 
 1. Run the command below to install the package:
 
 ```
-php artisan package:install
+php artisan bookmarkable:install
 ```
 
 

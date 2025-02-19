@@ -1,16 +1,14 @@
 {
-    "name": "miladimos/package-skeleton",
-    "description": "test description",
-    "homepage": "https://github.com/miladimos/package-skeleton",
+    "name": "laravelir/bookmarkable",
+    "description": "a bookmarks laravel package",
+    "homepage": "https://github.com/laravelir/bookmarkable",
     "type": "library",
     "version": "0.1.0",
     "keywords": [
         "laravel",
         "laravel-package",
         "laravel support",
-        "lumen packages",
-        "laravel packages",
-        "lumen support"
+        "laravel packages"
     ],
     "authors": [
         {
@@ -22,7 +20,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Vendor\\Package\\": "src/"
+            "Laravelir\\Bookmarkable\\": "src/"
         },
         "files": [
             "./src/helpers.php"
@@ -30,16 +28,16 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Vendor\\Package\\Tests\\": "tests"
+            "Laravelir\\Bookmarkable\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Package\\Package\\Providers\\PackageServiceProvider"
+                "Bookmarkable\\Bookmarkable\\Providers\\BookmarkableServiceProvider"
             ],
             "aliases": {
-                "Package": "Vendor\\Package\\Facades\\Package"
+                "Bookmarkable": "Laravelir\\Bookmarkable\\Facades\\Bookmarkable"
             }
         }
     },
