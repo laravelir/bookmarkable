@@ -13,14 +13,14 @@ class BookmarkableServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . "/../../config/bookmarkable.php", 'bookmarkable');
 
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-
         $this->registerFacades();
     }
 
     public function boot(): void
     {
         $this->registerCommands();
+        $this->publishConfig();
+        $this->publishMigrations();
     }
 
     private function registerFacades()
@@ -51,24 +51,7 @@ class BookmarkableServiceProvider extends ServiceProvider
     {
         $timestamp = date('Y_m_d_His', time());
         $this->publishes([
-            __DIR__ . '/../database/migrations/create_bookmarkable_tables.stub' => database_path() . "/migrations/{$timestamp}_bookmarkable_tables.php",
+            __DIR__ . '/../../database/migrations/create_bookmarkable_table.stub' => database_path() . "/migrations/{$timestamp}_bookmarkable_tables.php",
         ], 'bookmarkable-migrations');
     }
-
-    // private function registerRoutes()
-    // {
-    //     Route::group($this->routeConfiguration(), function () {
-    //         $this->loadRoutesFrom(__DIR__ . '/../../routes/bookmarkable.php', 'bookmarkable-routes');
-    //     });
-    // }
-
-    // private function routeConfiguration()
-    // {
-    //     return [
-    //         'prefix' => config('bookmarkable.routes.prefix'),
-    //         'middleware' => config('bookmarkable.routes.middleware'),
-    //         'as' => 'bookmarkable.'
-    //     ];
-    // }
-
 }

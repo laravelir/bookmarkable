@@ -8,10 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('bookmarkable_bookmark_groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('icon')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('bookmarkable_bookmarks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger(config('social.bookmarks.bookmarker_foreign_key'))->index()->comment('user_id');
-            $table->morphs(config('social.bookmarks.morphs'));
+            $table->morphs('bookmarker'); // user
+            $table->morphs('bookmarkable');
+            $table->foreignId('group_id')->nullable();
+            $table->timestamps();
         });
     }
 

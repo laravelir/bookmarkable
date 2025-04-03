@@ -21,10 +21,7 @@
     "autoload": {
         "psr-4": {
             "Laravelir\\Bookmarkable\\": "src/"
-        },
-        "files": [
-            "./src/helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -34,7 +31,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Bookmarkable\\Bookmarkable\\Providers\\BookmarkableServiceProvider"
+                "Laravelir\\Bookmarkable\\Providers\\BookmarkableServiceProvider"
             ],
             "aliases": {
                 "Bookmarkable": "Laravelir\\Bookmarkable\\Facades\\Bookmarkable"
