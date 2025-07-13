@@ -8,6 +8,8 @@ use  Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 trait Bookmarkable
 {
+    public function bookmarkBy(Model $user) {}
+
     public function isBookmarkedBy(Model $user): bool
     {
         if (\is_a($user, config('auth.providers.users.model'))) {

@@ -23,6 +23,6 @@ class BookmarkGroup extends Model
 
     public function bookmarks()
     {
-        return $this->belongsToMany(Bookmark::class);
+        return $this->belongsToMany(Bookmark::class, 'bookmarkable_bookmarks', 'group_id');
     }
 }

@@ -27,23 +27,13 @@ class Bookmark extends Model
         return $this->morphTo();
     }
 
-    public function bookmarkerable(): MorphTo
+    public function bookmarker(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public function bookmarker()
+    public function group()
     {
-        return $this->user();
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(\config('auth.providers.users.model'), \config('social.bookmarks.user_foreign_key'));
-    }
-
-    public function groups()
-    {
-        return $this->belongsToMany(BookmarkGroup::class);
+        return $this->belongsTo(BookmarkGroup::class);
     }
 }

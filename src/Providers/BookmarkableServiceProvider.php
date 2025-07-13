@@ -51,7 +51,7 @@ class BookmarkableServiceProvider extends ServiceProvider
     {
         $timestamp = date('Y_m_d_His', time());
         $this->publishes([
-            __DIR__ . '/../../database/migrations/create_bookmarkable_table.stub' => database_path() . "/migrations/{$timestamp}_bookmarkable_tables.php",
+            __DIR__ . '/../../database/migrations/create_bookmarkable_table.php' => database_path() . "/migrations/{$timestamp}_create_bookmarkable_table.php",
         ], 'bookmarkable-migrations');
     }
 }
