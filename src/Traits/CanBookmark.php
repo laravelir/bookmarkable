@@ -3,115 +3,68 @@
 namespace Laravelir\Bookmarkable\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use Laravelir\Bookmarkable\Models\Bookmark;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait CanBookmark
 {
-
-    public function bookmark(Model $object): Bookmark
+    public function bookmarkModel(): string
     {
-        $attributes = [
-            'bookmarkable_type' => $object->getMorphClass(),
-            'bookmarkable_id' => $object->getKey(),
-            config('social.bookmarks.user_foreign_key') => $this->getKey(),
-        ];
+        return config('laravelir.bookmarkable.bookmarks.model');
+    }
 
-        $bookmark = \app(config('social.bookmarks.model'));
+    public function bookmarks(): MorphMany
+    {
+        return $this->morphMany($this->bookmarkModel(), 'bookmarker');
+    }
 
-        return $bookmark->where($attributes)->firstOr(
-            function () use ($bookmark, $attributes) {
-                $bookmark->unguard();
+    public function bookmark(Model $model, $group_id = 0)
+    {
+        if (!$this->hasBookmarked($model)) {
 
+            $attributes = [
+                'bookmarkable_type' => $model->getMorphClass(),
+                'bookmarkable_id' => $model->getKey(),
+                'group_id' => $group_id
+            ];
+
+            return $this->bookmarks()->create($attributes);
+        }
+    }
+
+    public function unBookmark(Model $model): bool
+    {
+        if ($this->hasBookmarked($model)) {
+            $relation = $this->bookmarks()
+                ->where('bookmarkable_id', $model->getKey())
+                ->where('bookmarkable_type', $model->getMorphClass())
+                ->first();
+
+            if ($relation) {
                 if ($this->relationLoaded('bookmarks')) {
                     $this->unsetRelation('bookmarks');
                 }
 
-                return $bookmark->create($attributes);
-            }
-        );
-    }
-
-    public function unbookmark(Model $object): bool
-    {
-        $relation = \app(config('social.bookmarks.model'))
-            ->where('bookmarkable_id', $object->getKey())
-            ->where('bookmarkable_type', $object->getMorphClass())
-            ->where(config('social.bookmarks.user_foreign_key'), $this->getKey())
-            ->first();
-
-        if ($relation) {
-            if ($this->relationLoaded('bookmarks')) {
-                $this->unsetRelation('bookmarks');
+                return $relation->delete();
             }
 
-            return $relation->delete();
+            return true;
         }
 
-        return true;
+        return false;
     }
 
-    public function toggleBookmark(Model $object)
+    public function toggleBookmark(Model $model)
     {
-        return $this->hasBookmarkd($object) ? $this->unbookmark($object) : $this->bookmark($object);
+        return $this->hasBookmarked($model) ? $this->unBookmark($model) : $this->bookmark($model);
     }
 
-    public function hasBookmarkd(Model $object): bool
+    public function hasBookmarked(Model $model): bool
     {
-        return ($this->relationLoaded('bookmarks') ? $this->bookmarks : $this->bookmarks())
-            ->where('bookmarkable_id', $object->getKey())
-            ->where('bookmarkable_type', $object->getMorphClass())
-            ->count() > 0;
-    }
+        // return ($this->relationLoaded('bookmarks') ? $this->bookmarks : $this->bookmarks())
 
-    public function bookmarks(): HasMany
-    {
-        return $this->hasMany(config('social.bookmarks.model'), config('social.bookmarks.user_foreign_key'), $this->getKeyName());
-    }
-
-
-    /**
-     * Favorite the given article.
-     *
-     * @param Model $article
-     * @return mixed
-     */
-    public function favorite(Model $article)
-    {
-        if (!$this->hasFavorited($article)) {
-            return $this->favorites()->attach($article);
-        }
-    }
-
-    /**
-     * Unfavorite the given article.
-     *
-     * @param Model $article
-     * @return mixed
-     */
-    public function unFavorite(Model $article)
-    {
-        return $this->favorites()->detach($article);
-    }
-
-    /**
-     * Get the articles favorited by the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function favorites()
-    {
-        return $this->belongsToMany(Model::class, 'favorites', 'user_id', 'article_id')->withTimestamps();
-    }
-
-    /**
-     * Check if the user has favorited the given article.
-     *
-     * @param Model $article
-     * @return bool
-     */
-    public function hasFavorited(Model $article)
-    {
-        return !!$this->favorites()->where('article_id', $article->id)->count();
+        return !! $this->bookmarks()
+            ->where('bookmarkable_id', $model->getKey())
+            ->where('bookmarkable_type', $model->getMorphClass())
+            ->exists();
     }
 }
